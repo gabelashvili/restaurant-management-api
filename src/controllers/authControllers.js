@@ -1,5 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
+import fs from 'fs';
+import path from 'path';
 import ErrorResponse from '../utils/errorResponse.js';
 import UserModel from '../models/userModel.js';
 import responseMessages from '../utils/responseMessages.js';
@@ -115,7 +117,11 @@ export const updateDetails = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1/auth/update-avatar
 // @access  Private
 export const updateAvatar = asyncHandler(async (req, res, _next) => {
-  console.log(req.file);
+  const user = await UserModel.findByIdAndUpdate(req.userId, { avatar: req.file.filename });
+
+  if (user.avatar && req.file.filename !== user.avatar) {
+    fs.unlink(path.join(req.file.destination, user.avatar), () => {});
+  }
 
   // toFile() method stores the image on disk
   return res.send(new SuccessResponse(

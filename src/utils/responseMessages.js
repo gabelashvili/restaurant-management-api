@@ -16,6 +16,9 @@ const responseMessages = {
     somethingWentWrong: 'something_went_wrong',
     invalidCredentials: 'invalid_credentials',
     tooManyArguments: 'too_many_arguments',
+    invalidFileFormat: 'invalid_file_format',
+    fileTooLarge: 'file_too_large',
+    fileNotFound: 'file_not_found',
   },
   success: {
     signIn: 'sign_in',

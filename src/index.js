@@ -3,10 +3,13 @@ import colors from 'colors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import fs from 'fs';
 import { morganFormats } from './utils/helpers.js';
 import connectDb from './utils/connectDb.js';
 import authRoutes from './routes/authRoutes.js';
 import errorHandler from './middlewares/errorHandler.js';
+import ErrorResponse from './utils/errorResponse.js';
+import responseMessages from './utils/responseMessages.js';
 
 // Load configs
 dotenv.config({ path: 'src/config/config.env' });
@@ -26,6 +29,14 @@ connectDb().then(() => {
 
   // Body parser
   app.use(express.json());
+
+  // Get avatar
+  app.get('/avatar/:avatarName', (req, res, next) => {
+    const { avatarName } = req.params;
+    const readStream = fs.createReadStream(`./src/uploads/avatars/${avatarName}`);
+    readStream.on('error', () => next(new ErrorResponse(400, responseMessages.error.fileNotFound)));
+    readStream.pipe(res);
+  });
 
   // routes
   app.use('/api/v1/auth', authRoutes);
