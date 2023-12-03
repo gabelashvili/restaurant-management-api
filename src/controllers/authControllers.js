@@ -37,12 +37,10 @@ export const signIn = asyncHandler(async (req, res, next) => {
 // @desc    Get authed user data
 // @route   POST /api/v1/auth/user/:userId
 // @access  Private
-export const getAuthedUser = asyncHandler(async (req, res, next) => {
-  const { user } = req;
-  const userX = await UserModel.findById(user.id).populate('role');
-  if (!userX) {
-    return next(new ErrorResponse(404, errors.user.notFound));
-  }
+export const getAuthedUser = asyncHandler(async (req, res, _next) => {
+  const { authedUser } = req;
+
+  const user = await authedUser.populate('role');
 
   return res.send(new SuccessResponse(user, null));
 });
@@ -53,14 +51,14 @@ export const getAuthedUser = asyncHandler(async (req, res, next) => {
 export const refreshToken = async (req, res, next) => {
   const token = req?.headers?.authorization?.split('Bearer')?.[1]?.trim();
   if (!token) {
-    return next(new ErrorResponse(401, errors.unauthorized));
+    return next(new ErrorResponse(401, errors.user.unauthorized));
   }
   try {
     const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_KEY);
     const { userId } = decoded;
     const user = await UserModel.findById(userId);
     if (!user) {
-      return next(new ErrorResponse(401, errors.unauthorized));
+      return next(new ErrorResponse(401, errors.user.unauthorized));
     }
     const { accessToken } = user.generateTokens();
     return res.send(new SuccessResponse(
@@ -68,7 +66,7 @@ export const refreshToken = async (req, res, next) => {
       null,
     ));
   } catch (err) {
-    return next(new ErrorResponse(401, errors.unauthorized));
+    return next(new ErrorResponse(401, errors.user.unauthorized));
   }
 };
 
@@ -76,16 +74,18 @@ export const refreshToken = async (req, res, next) => {
 // @route   POST /api/v1/auth/update-password
 // @access  Private
 export const updatePassword = asyncHandler(async (req, res, next) => {
+  const { authedUser } = req;
+
   await updatePasswordSchema.validateAsync(req.body);
 
-  const user = await UserModel.findById(req.userId).select('+password');
+  const user = await UserModel.findById(authedUser._id).select('+password');
   if (!user) {
-    return next(new ErrorResponse(401, errors.userNotFound));
+    return next(new ErrorResponse(401, errors.user.notFound));
   }
 
   const isPasswordValid = await user.validatePassword(req.body.currentPassword);
   if (!isPasswordValid) {
-    return next(new ErrorResponse(400, errors.invalidParams));
+    return next(new ErrorResponse(400, errors.common.invalidParams));
   }
 
   await UserModel.findOneAndUpdate({ _id: req.userId }, { password: req.body.newPassword });
@@ -102,14 +102,14 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
 export const updateDetails = asyncHandler(async (req, res, next) => {
   await updateDetailsSchema.validateAsync(req.body);
 
-  const user = await UserModel.findByIdAndUpdate(req.userId, { ...req.body }, { new: true });
+  const user = await UserModel.findByIdAndUpdate(req.authedUser._id, { ...req.body }, { new: true });
   if (!user) {
     return next(new ErrorResponse(401, errors.userNotFound));
   }
 
   return res.send(new SuccessResponse(
     null,
-    success.user.detailsUpdate,
+    success.common.dataUpdated,
   ));
 });
 
@@ -117,11 +117,12 @@ export const updateDetails = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1/auth/update-avatar
 // @access  Private
 export const updateAvatar = asyncHandler(async (req, res, _next) => {
-  const user = await UserModel.findByIdAndUpdate(req.userId, { avatar: req.file.filename });
-
-  if (user.avatar && req.file.filename !== user.avatar) {
-    fs.unlink(path.join(req.file.destination, user.avatar), () => {});
+  if (req.authedUser.avatar && req.file.filename !== req.authedUser.avatar) {
+    fs.unlink(path.join(req.file.destination, req.authedUser.avatar), () => {
+    });
   }
+
+  await UserModel.findByIdAndUpdate(req.authedUser.id, { avatar: req.file.filename });
 
   // toFile() method stores the image on disk
   return res.send(new SuccessResponse(

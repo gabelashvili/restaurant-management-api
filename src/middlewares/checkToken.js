@@ -16,6 +16,7 @@ const checkToken = async (req, res, next) => {
       if (!user) {
         return next(new ErrorResponse(401, errors.user.unauthorized));
       }
+      req.authedUser = user;
     }
     return next();
   } catch (err) {
