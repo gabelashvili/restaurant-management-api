@@ -9,7 +9,7 @@ import connectDb from './utils/connectDb.js';
 import authRoutes from './routes/authRoutes.js';
 import errorHandler from './middlewares/errorHandler.js';
 import ErrorResponse from './utils/errorResponse.js';
-import responseMessages from './utils/responseMessages.js';
+import { errors } from './utils/responseMessages.js';
 
 // Load configs
 dotenv.config({ path: 'src/config/config.env' });
@@ -34,7 +34,7 @@ connectDb().then(() => {
   app.get('/avatar/:avatarName', (req, res, next) => {
     const { avatarName } = req.params;
     const readStream = fs.createReadStream(`./src/uploads/avatars/${avatarName}`);
-    readStream.on('error', () => next(new ErrorResponse(400, responseMessages.error.fileNotFound)));
+    readStream.on('error', () => next(new ErrorResponse(404, errors.fileUpload.fileNotFound)));
     readStream.pipe(res);
   });
 

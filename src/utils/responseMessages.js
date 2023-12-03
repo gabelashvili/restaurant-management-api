@@ -1,30 +1,35 @@
-const responseMessages = {
-  error: {
-    serverError: 'server_error',
+export const success = {
+  common: {
+    dataUpdated: 'data_updated',
+  },
+  user: {
+    signIn: 'sign_in',
+    passwordUpdate: 'password_update',
+  },
+};
+
+export const errors = {
+  common: {
+    invalidParams: 'invalid_params',
+    notFound: 'data_not_found',
+    somethingWentWrong: 'something_went_wrong',
+    tooManyArguments: 'too_many_arguments',
+  },
+  user: {
     firstNameRequired: 'firstName_required',
     lastNameRequired: 'lastName_required',
     emailRequired: 'email_required',
-    invalidEmail: 'invalid_email',
-    invalidPasswordFormat: 'invalid_password_format',
+    wrongEmailFormat: 'wrong_email_format',
+    wrongPasswordFormat: 'wrong_password_format',
     passwordRequired: 'password_required',
-    roleIdRequired: 'roleId_required',
-    invalidId: 'invalid_id',
-    invalidParams: 'invalid_params',
-    dataNotFound: 'data_not_found',
-    userNotFound: 'user_not_found',
-    unauthorized: 'unauthorized',
-    somethingWentWrong: 'something_went_wrong',
+    roleRequired: 'role_required',
+    notFound: 'user_not_found',
     invalidCredentials: 'invalid_credentials',
-    tooManyArguments: 'too_many_arguments',
+    unauthorized: 'unauthorized',
+  },
+  fileUpload: {
     invalidFileFormat: 'invalid_file_format',
     fileTooLarge: 'file_too_large',
     fileNotFound: 'file_not_found',
   },
-  success: {
-    signIn: 'sign_in',
-    passwordUpdate: 'password_update',
-    detailsUpdate: 'details_update',
-  },
 };
-
-export default responseMessages;

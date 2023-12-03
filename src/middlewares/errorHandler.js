@@ -1,6 +1,6 @@
 import multer from 'multer';
 import ErrorResponse from '../utils/errorResponse.js';
-import responseMessages from '../utils/responseMessages.js';
+import { errors } from '../utils/responseMessages.js';
 
 const errorHandler = (err, _req, res, _next) => {
   let errorResponse = {
@@ -11,7 +11,7 @@ const errorHandler = (err, _req, res, _next) => {
   if (err.name === 'ValidationError') {
     errorResponse = new ErrorResponse(
       400,
-      responseMessages.error[err?.details?.[0]?.type === 'object.unknown' ? 'tooManyArguments' : 'invalidParams'],
+      errors.common[err?.details?.[0]?.type === 'object.unknown' ? 'tooManyArguments' : 'invalidParams'],
     );
   }
 
@@ -19,17 +19,17 @@ const errorHandler = (err, _req, res, _next) => {
     if (err.code === 'LIMIT_FILE_SIZE') {
       errorResponse = new ErrorResponse(
         400,
-        responseMessages.error.fileTooLarge,
+        errors.fileUpload.fileTooLarge,
       );
     } else if (err.code === 'INVALID_FILE_FORMAT') {
       errorResponse = new ErrorResponse(
         400,
-        responseMessages.error.invalidFileFormat,
+        errors.fileUpload.invalidFileFormat,
       );
     } else {
       errorResponse = new ErrorResponse(
         400,
-        responseMessages.error.invalidParams,
+        errors.common.invalidParams,
       );
     }
   }

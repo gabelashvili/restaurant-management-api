@@ -2,31 +2,31 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import RoleModel from './roleModel.js';
-import responseMessages from '../utils/responseMessages.js';
+import { errors } from '../utils/responseMessages.js';
 
 const UserSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      required: [true, responseMessages.error.firstNameRequired],
+      required: [true, errors.user.firstNameRequired],
     },
     lastName: {
       type: String,
-      required: [true, responseMessages.error.lastNameRequired],
+      required: [true, errors.user.lastNameRequired],
     },
     email: {
       type: String,
-      required: [true, responseMessages.error.emailRequired],
+      required: [true, errors.user.emailRequired],
       unique: true,
       match: [
         // eslint-disable-next-line max-len
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        responseMessages.error.invalidEmail,
+        errors.user.invalidEmail,
       ],
     },
     password: {
       type: String,
-      required: [true, responseMessages.error.passwordRequired],
+      required: [true, errors.user.passwordRequired],
       select: false,
       // Min 1 uppercase letter.
       // Min 1 lowercase letter.
@@ -34,11 +34,11 @@ const UserSchema = new mongoose.Schema(
       // Min 1 number.
       // Min 8 characters.
       // Max 30 characters.
-      match: [/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^A-Za-z0-9]).{8,30}$/, responseMessages.error.invalidPasswordFormat],
+      match: [/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^A-Za-z0-9]).{8,30}$/, errors.user.invalidPasswordFormat],
     },
     roleId: {
       type: Number,
-      required: [true, responseMessages.error.roleIdRequired],
+      required: [true, errors.user.roleRequired],
     },
     avatar: {
       type: String,
