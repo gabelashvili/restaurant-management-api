@@ -1,15 +1,13 @@
 import multer from 'multer';
-import colors from 'colors';
 import fs from 'fs';
 
-const AVATAR_MAX_SIZE = 5 * 1024 * 1024;
+const AVATAR_MAX_SIZE = 2 * 1024 * 1024;
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dest = 'src/uploads/avatars';
     fs.access(dest, (error) => {
       if (error) {
-        console.log(colors.bold.red('Avatar images directory does not exist.'));
         fs.mkdirSync(dest, { recursive: true });
       }
       return cb(null, dest);
