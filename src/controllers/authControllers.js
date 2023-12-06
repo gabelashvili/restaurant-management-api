@@ -13,17 +13,17 @@ import { updateDetailsSchema, updatePasswordSchema } from '../schemas/auth-schem
 // @access  Public
 export const signIn = asyncHandler(async (req, res, next) => {
   if (!req.body?.password || !req.body?.email) {
-    return next(new ErrorResponse(401, errors.user.unauthorized));
+    return next(new ErrorResponse(401, errors.user.unauthorized, errors.user.unauthorized));
   }
 
   const user = await UserModel.findOne({ email: req.body.email }).select('+password');
   if (!user) {
-    return next(new ErrorResponse(404, errors.user.notFound));
+    return next(new ErrorResponse(404, errors.user.notFound, errors.user.notFound));
   }
 
   const isPasswordValid = await user.validatePassword(req.body.password);
   if (!isPasswordValid) {
-    return next(new ErrorResponse(400, errors.user.invalidCredentials));
+    return next(new ErrorResponse(400, errors.user.invalidCredentials, errors.user.invalidCredentials));
   }
 
   const tokens = user.generateTokens();
@@ -51,14 +51,14 @@ export const getAuthedUser = asyncHandler(async (req, res, _next) => {
 export const refreshToken = async (req, res, next) => {
   const token = req?.headers?.authorization?.split('Bearer')?.[1]?.trim();
   if (!token) {
-    return next(new ErrorResponse(401, errors.user.unauthorized));
+    return next(new ErrorResponse(401, errors.user.unauthorized, errors.user.unauthorized));
   }
   try {
     const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_KEY);
     const { userId } = decoded;
     const user = await UserModel.findById(userId);
     if (!user) {
-      return next(new ErrorResponse(401, errors.user.unauthorized));
+      return next(new ErrorResponse(401, errors.user.unauthorized, errors.user.unauthorized));
     }
     const { accessToken } = user.generateTokens();
     return res.send(new SuccessResponse(
@@ -66,7 +66,7 @@ export const refreshToken = async (req, res, next) => {
       null,
     ));
   } catch (err) {
-    return next(new ErrorResponse(401, errors.user.unauthorized));
+    return next(new ErrorResponse(401, errors.user.unauthorized, errors.user.unauthorized));
   }
 };
 
@@ -80,12 +80,12 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
 
   const user = await UserModel.findById(authedUser._id).select('+password');
   if (!user) {
-    return next(new ErrorResponse(401, errors.user.notFound));
+    return next(new ErrorResponse(401, errors.user.notFound, errors.user.notFound));
   }
 
   const isPasswordValid = await user.validatePassword(req.body.currentPassword);
   if (!isPasswordValid) {
-    return next(new ErrorResponse(400, errors.common.invalidParams));
+    return next(new ErrorResponse(400, errors.common.invalidParams, errors.common.invalidParams));
   }
 
   await UserModel.findOneAndUpdate({ _id: req.userId }, { password: req.body.newPassword });
@@ -104,7 +104,7 @@ export const updateDetails = asyncHandler(async (req, res, next) => {
 
   const user = await UserModel.findByIdAndUpdate(req.authedUser._id, { ...req.body }, { new: true, runValidators: true });
   if (!user) {
-    return next(new ErrorResponse(401, errors.userNotFound));
+    return next(new ErrorResponse(401, errors.userNotFound, errors.userNotFound));
   }
 
   return res.send(new SuccessResponse(
