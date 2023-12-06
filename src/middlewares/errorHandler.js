@@ -35,23 +35,32 @@ const errorHandler = (err, _req, res, _next) => {
   }
 
   // Joi errors
-  console.log(err);
+  if (err.isJoi) {
+    errorResponse = new ErrorResponse(
+      400,
+      err.details.map((el) => el.message).join(';'),
+      errors.common.invalidParams,
+    );
+  }
 
   // Multer errors
   if (err instanceof multer.MulterError) {
     if (err.code === 'LIMIT_FILE_SIZE') {
       errorResponse = new ErrorResponse(
         400,
+        errors.common.invalidParams,
         errors.fileUpload.fileTooLarge,
       );
     } else if (err.code === 'INVALID_FILE_FORMAT') {
       errorResponse = new ErrorResponse(
         400,
+        errors.common.invalidParams,
         errors.fileUpload.invalidFileFormat,
       );
     } else {
       errorResponse = new ErrorResponse(
         400,
+        'unknown',
         errors.common.invalidParams,
       );
     }

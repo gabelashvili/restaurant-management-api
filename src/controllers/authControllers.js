@@ -76,7 +76,7 @@ export const refreshToken = async (req, res, next) => {
 export const updatePassword = asyncHandler(async (req, res, next) => {
   const { authedUser } = req;
 
-  await updatePasswordSchema.validateAsync(req.body);
+  await updatePasswordSchema.validateAsync(req.body, { abortEarly: false });
 
   const user = await UserModel.findById(authedUser._id).select('+password');
   if (!user) {
@@ -100,7 +100,7 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1/auth/update-details
 // @access  Private
 export const updateDetails = asyncHandler(async (req, res, next) => {
-  await updateDetailsSchema.validateAsync(req.body);
+  await updateDetailsSchema.validateAsync(req.body, { abortEarly: false });
 
   const user = await UserModel.findByIdAndUpdate(req.authedUser._id, { ...req.body }, { new: true, runValidators: true });
   if (!user) {

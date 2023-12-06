@@ -6,8 +6,8 @@ export const updatePasswordSchema = joi.object({
 });
 
 export const updateDetailsSchema = joi.object({
-  firstName: joi.string().min(1),
-  lastName: joi.string().min(1),
+  firstName: joi.number().min(1),
+  lastName: joi.number().min(1),
   // eslint-disable-next-line max-len
   email: joi.string().pattern(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/),
 }).min(1);
