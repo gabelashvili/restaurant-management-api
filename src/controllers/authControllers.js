@@ -102,7 +102,7 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
 export const updateDetails = asyncHandler(async (req, res, next) => {
   await updateDetailsSchema.validateAsync(req.body);
 
-  const user = await UserModel.findByIdAndUpdate(req.authedUser._id, { ...req.body }, { new: true });
+  const user = await UserModel.findByIdAndUpdate(req.authedUser._id, { ...req.body }, { new: true, runValidators: true });
   if (!user) {
     return next(new ErrorResponse(401, errors.userNotFound));
   }

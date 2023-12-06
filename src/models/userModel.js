@@ -2,31 +2,32 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import RoleModel from './roleModel.js';
-import { errors } from '../utils/responseMessages.js';
 
 const UserSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      required: [true, errors.user.firstNameRequired],
+      required: true,
+      trim: true,
+      minlength: 2,
     },
     lastName: {
       type: String,
-      required: [true, errors.user.lastNameRequired],
+      required: true,
+      trim: true,
+      minlength: 2,
     },
     email: {
       type: String,
-      required: [true, errors.user.emailRequired],
+      trim: true,
+      required: true,
       unique: true,
-      match: [
-        // eslint-disable-next-line max-len
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        errors.user.invalidEmail,
-      ],
+      // eslint-disable-next-line max-len
+      match: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     },
     password: {
       type: String,
-      required: [true, errors.user.passwordRequired],
+      required: true,
       select: false,
       // Min 1 uppercase letter.
       // Min 1 lowercase letter.
@@ -34,11 +35,11 @@ const UserSchema = new mongoose.Schema(
       // Min 1 number.
       // Min 8 characters.
       // Max 30 characters.
-      match: [/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^A-Za-z0-9]).{8,30}$/, errors.user.invalidPasswordFormat],
+      match: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^A-Za-z0-9]).{8,30}$/,
     },
     roleId: {
       type: Number,
-      required: [true, errors.user.roleRequired],
+      required: true,
     },
     avatar: {
       type: String,
