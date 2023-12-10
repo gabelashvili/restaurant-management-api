@@ -6,6 +6,9 @@ export const success = {
     signIn: 'sign_in',
     passwordUpdate: 'password_update',
   },
+  branch: {
+    created: 'branch_created',
+  },
 };
 
 export const errors = {

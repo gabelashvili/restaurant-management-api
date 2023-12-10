@@ -86,6 +86,8 @@ const BranchSchema = new mongoose.Schema(
         },
       },
     ],
+    createdAt: { type: Date, select: false },
+    updatedAt: { type: Date, select: false },
   },
   {
     timestamps: true,
