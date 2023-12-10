@@ -1,5 +1,6 @@
 import multer from 'multer';
 import mongoose from 'mongoose';
+import { ValidationError as YupError } from 'yup';
 import ErrorResponse from '../utils/errorResponse.js';
 import { errors } from '../utils/responseMessages.js';
 
@@ -30,6 +31,15 @@ const errorHandler = (err, _req, res, _next) => {
     errorResponse = new ErrorResponse(
       400,
       `${err.codeName} - ${JSON.stringify(err.keyValue)}`,
+      errors.common.invalidParams,
+    );
+  }
+
+  // Joi errors
+  if (err instanceof YupError) {
+    errorResponse = new ErrorResponse(
+      400,
+      err.inner.map((el) => el.message).join(';'),
       errors.common.invalidParams,
     );
   }
