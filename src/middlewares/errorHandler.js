@@ -34,15 +34,6 @@ const errorHandler = (err, _req, res, _next) => {
     );
   }
 
-  // Joi errors
-  if (err.isJoi) {
-    errorResponse = new ErrorResponse(
-      400,
-      err.details.map((el) => el.message).join(';'),
-      errors.common.invalidParams,
-    );
-  }
-
   // Multer errors
   if (err instanceof multer.MulterError) {
     if (err.code === 'LIMIT_FILE_SIZE') {
