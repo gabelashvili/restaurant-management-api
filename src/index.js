@@ -10,6 +10,7 @@ import authRoutes from './routes/authRoutes.js';
 import errorHandler from './middlewares/errorHandler.js';
 import ErrorResponse from './utils/errorResponse.js';
 import { errors } from './utils/responseMessages.js';
+import branchRoutes from './routes/branchRoutes.js';
 
 // Load configs
 dotenv.config({ path: 'src/config/config.env' });
@@ -40,6 +41,7 @@ connectDb().then(() => {
 
   // routes
   app.use('/api/v1/auth', authRoutes);
+  app.use('/api/v1/branch', branchRoutes);
 
   // Handle errors
 

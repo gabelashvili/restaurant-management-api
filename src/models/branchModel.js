@@ -2,64 +2,90 @@ import mongoose from 'mongoose';
 
 const BranchSchema = new mongoose.Schema(
   {
-    name: {
-      ge: {
-        type: String,
-        required: true,
+    general: {
+      name: {
+        ka: {
+          type: String,
+          required: true,
+        },
+        en: {
+          type: String,
+          required: true,
+        },
       },
-      en: {
-        type: String,
-        required: true,
-      },
-    },
-    address: {
-      ge: {
-        type: String,
-        required: true,
-      },
-      en: {
-        type: String,
-        required: true,
+      address: {
+        ka: {
+          type: String,
+          required: true,
+        },
+        en: {
+          type: String,
+          required: true,
+        },
       },
     },
     workingHours: {
-      required: true,
       monday: {
-        startHour: Date,
-        endHour: Date,
+        required: Boolean,
+        data: [{
+          start: String,
+          end: String,
+        }],
       },
       tuesday: {
-        startHour: Date,
-        endHour: Date,
+        required: Boolean,
+        data: [{
+          start: String,
+          end: String,
+        }],
       },
       wednesday: {
-        startHour: Date,
-        endHour: Date,
+        required: Boolean,
+        data: [{
+          start: String,
+          end: String,
+        }],
       },
       thursday: {
-        startHour: Date,
-        endHour: Date,
+        required: Boolean,
+        data: [{
+          start: String,
+          end: String,
+        }],
       },
       friday: {
-        startHour: Date,
-        endHour: Date,
+        required: Boolean,
+        data: [{
+          start: String,
+          end: String,
+        }],
       },
       saturday: {
-        startHour: Date,
-        endHour: Date,
+        required: Boolean,
+        data: [{
+          start: String,
+          end: String,
+        }],
       },
       sunday: {
-        startHour: Date,
-        endHour: Date,
+        required: Boolean,
+        data: [{
+          start: String,
+          end: String,
+        }],
       },
-      exceptions: [
-        {
-          date: Date,
-          startHour: Date,
-          endHour: Date,
-        },
-      ],
     },
+    exceptions: [
+      {
+        date: Date,
+        start: Date,
+        end: Date,
+        repeat: {
+          type: String,
+          enum: ['annually', 'one_time'],
+        },
+      },
+    ],
   },
   {
     timestamps: true,
