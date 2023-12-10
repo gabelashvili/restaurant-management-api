@@ -55,7 +55,6 @@ const UserSchema = new mongoose.Schema(
       virtuals: true,
       versionKey: false,
       transform: (doc, ret) => {
-        delete ret._id;
         delete ret.roleId;
       },
     },
@@ -97,14 +96,14 @@ UserSchema.methods.validatePassword = async function (password) {
 
 UserSchema.methods.generateTokens = function generateTokens() {
   const accessToken = jwt.sign(
-    { userId: this.id },
+    { userId: this._id },
     process.env.ACCESS_TOKEN_KEY,
     {
       expiresIn: process.env.ACCESS_TOKEN_EXPIRE_IN,
     },
   );
   const refreshToken = jwt.sign(
-    { userId: this.id },
+    { userId: this._id },
     process.env.REFRESH_TOKEN_KEY,
     {
       expiresIn: process.env.REFRESH_TOKEN_EXPIRE_IN,
