@@ -3,7 +3,6 @@ import * as yup from 'yup';
 
 const optionalDateSchema = yup.array().of(
   yup.object().shape({
-    id: yup.string().required(),
     start: yup.string().required().nullable().notOneOf(['Invalid date']),
     end: yup.string().required().nullable().notOneOf(['Invalid date']),
   }).noUnknown(true).strict(),
@@ -11,7 +10,6 @@ const optionalDateSchema = yup.array().of(
 
 const requiredDateSchema = yup.array().of(
   yup.object().shape({
-    id: yup.string().required(),
     start: yup
       .string()
       .nullable()
@@ -45,7 +43,6 @@ const requiredDateSchema = yup.array().of(
 ).min(1);
 
 const weekDaySchema = yup.object().shape({
-  id: yup.string().required(),
   enabled: yup.boolean().required(),
   data: yup
     .array()
@@ -61,7 +58,6 @@ const weekDaySchema = yup.object().shape({
 }).noUnknown(true).strict();
 
 const exceptionSchema = yup.object().shape({
-  id: yup.string().required(),
   start: yup
     .string()
     .required()
