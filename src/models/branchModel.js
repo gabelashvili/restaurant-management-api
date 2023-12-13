@@ -23,56 +23,171 @@ const BranchSchema = new mongoose.Schema(
           required: true,
         },
       },
+      phone: {
+        type: String,
+        default: null,
+      },
+      email: {
+        type: String,
+        default: null,
+        // eslint-disable-next-line max-len
+        match: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      },
     },
     workingHours: {
       monday: {
-        required: Boolean,
-        data: [{
-          start: String,
-          end: String,
-        }],
+        enabled: {
+          type: Boolean,
+          default: false,
+        },
+        data: {
+          type: [{
+            start: {
+              type: String,
+              default: null,
+            },
+            end: {
+              type: String,
+              default: null,
+            },
+          }],
+          default: [{
+            start: null,
+            end: null,
+          }],
+        },
       },
       tuesday: {
-        required: Boolean,
-        data: [{
-          start: String,
-          end: String,
-        }],
+        enabled: {
+          type: Boolean,
+          default: false,
+        },
+        data: {
+          type: [{
+            start: {
+              type: String,
+              default: null,
+            },
+            end: {
+              type: String,
+              default: null,
+            },
+          }],
+          default: [{
+            start: null,
+            end: null,
+          }],
+        },
       },
       wednesday: {
-        required: Boolean,
-        data: [{
-          start: String,
-          end: String,
-        }],
+        enabled: {
+          type: Boolean,
+          default: false,
+        },
+        data: {
+          type: [{
+            start: {
+              type: String,
+              default: null,
+            },
+            end: {
+              type: String,
+              default: null,
+            },
+          }],
+          default: [{
+            start: null,
+            end: null,
+          }],
+        },
       },
       thursday: {
-        required: Boolean,
-        data: [{
-          start: String,
-          end: String,
-        }],
+        enabled: {
+          type: Boolean,
+          default: false,
+        },
+        data: {
+          type: [{
+            start: {
+              type: String,
+              default: null,
+            },
+            end: {
+              type: String,
+              default: null,
+            },
+          }],
+          default: [{
+            start: null,
+            end: null,
+          }],
+        },
       },
       friday: {
-        required: Boolean,
-        data: [{
-          start: String,
-          end: String,
-        }],
+        enabled: {
+          type: Boolean,
+          default: false,
+        },
+        data: {
+          type: [{
+            start: {
+              type: String,
+              default: null,
+            },
+            end: {
+              type: String,
+              default: null,
+            },
+          }],
+          default: [{
+            start: null,
+            end: null,
+          }],
+        },
       },
       saturday: {
-        required: Boolean,
-        data: [{
-          start: String,
-          end: String,
-        }],
+        enabled: {
+          type: Boolean,
+          default: false,
+        },
+        data: {
+          type: [{
+            start: {
+              type: String,
+              default: null,
+            },
+            end: {
+              type: String,
+              default: null,
+            },
+          }],
+          default: [{
+            start: null,
+            end: null,
+          }],
+        },
       },
       sunday: {
-        required: Boolean,
-        data: [{
-          start: String,
-          end: String,
-        }],
+        enabled: {
+          type: Boolean,
+          default: false,
+        },
+        data: {
+          type: [{
+            start: {
+              type: String,
+              default: null,
+            },
+            end: {
+              type: String,
+              default: null,
+            },
+          }],
+          default: [{
+            start: null,
+            end: null,
+          }],
+        },
       },
     },
     exceptions: [

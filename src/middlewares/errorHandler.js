@@ -10,7 +10,7 @@ const errorHandler = (err, _req, res, _next) => {
     desc: null,
     message: err.message || 'Server Error',
   };
-
+  console.log(err);
   // Mongoose
   if (err instanceof mongoose.Error.CastError) {
     errorResponse = new ErrorResponse(
@@ -39,7 +39,7 @@ const errorHandler = (err, _req, res, _next) => {
   if (err instanceof YupError) {
     errorResponse = new ErrorResponse(
       400,
-      err.inner.map((el) => el.message).join(';'),
+      err.errors.map((el) => el).join(';'),
       errors.common.invalidParams,
     );
   }

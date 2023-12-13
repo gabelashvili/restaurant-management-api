@@ -41,7 +41,7 @@ connectDb().then(() => {
 
   // routes
   app.use('/api/v1/auth', authRoutes);
-  app.use('/api/v1/branch', branchRoutes);
+  app.use('/api/v1/branches', branchRoutes);
 
   // Handle errors
 

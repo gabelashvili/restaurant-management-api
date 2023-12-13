@@ -8,7 +8,7 @@ import { success } from '../utils/responseMessages.js';
 // @route   POST /api/v1/branch
 // @access  Private, role-based
 export const createBranch = asyncHandler(async (req, res, _next) => {
-  await branchSchema.validate(req.body);
+  await branchSchema.validate(req.body, { abortEarly: false });
 
   const branch = await BranchModel.create(req.body);
 

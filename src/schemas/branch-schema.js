@@ -6,7 +6,7 @@ const optionalDateSchema = yup.array().of(
     id: yup.string().required(),
     start: yup.string().required().nullable().notOneOf(['Invalid date']),
     end: yup.string().required().nullable().notOneOf(['Invalid date']),
-  }),
+  }).noUnknown(true).strict(),
 );
 
 const requiredDateSchema = yup.array().of(
@@ -41,8 +41,8 @@ const requiredDateSchema = yup.array().of(
         }
         return true;
       }),
-  }),
-);
+  }).noUnknown(true).strict(),
+).min(1);
 
 const weekDaySchema = yup.object().shape({
   id: yup.string().required(),
@@ -100,25 +100,29 @@ const generalInfoSchema = yup
         ka: yup.string().required(),
         en: yup.string().required(),
       })
-      .required(),
+      .required().noUnknown(true)
+      .strict(),
     address: yup.object().shape({
       ka: yup.string().required(),
       en: yup.string().required(),
-    }),
-    email: yup.string().required().nullable(),
-    phone: yup.string().required().nullable(),
+    }).required().noUnknown(true)
+      .strict(),
+    email: yup.string().nullable(),
+    phone: yup.string().nullable(),
   }).noUnknown(true).strict();
+
+const workingHoursSchema = yup.object().shape({
+  monday: weekDaySchema,
+  tuesday: weekDaySchema,
+  wednesday: weekDaySchema,
+  thursday: weekDaySchema,
+  friday: weekDaySchema,
+  saturday: weekDaySchema,
+  sunday: weekDaySchema,
+}).noUnknown(true).strict();
 
 export const branchSchema = yup.object().shape({
   general: generalInfoSchema,
-  workingHours: yup.object().shape({
-    monday: weekDaySchema,
-    tuesday: weekDaySchema,
-    wednesday: weekDaySchema,
-    thursday: weekDaySchema,
-    friday: weekDaySchema,
-    saturday: weekDaySchema,
-    sunday: weekDaySchema,
-  }).noUnknown(true).strict(),
-  exceptions: yup.array().of(exceptionSchema).required(),
+  workingHours: workingHoursSchema,
+  exceptions: yup.array().of(exceptionSchema),
 }).noUnknown(true).strict();
