@@ -8,6 +8,7 @@ export const success = {
   },
   branch: {
     created: 'branch_created',
+    updated: 'branch_updated',
   },
 };
 
@@ -27,5 +28,8 @@ export const errors = {
     invalidFileFormat: 'invalid_file_format',
     fileTooLarge: 'file_too_large',
     fileNotFound: 'file_not_found',
+  },
+  branch: {
+    notFound: 'branch_not_found',
   },
 };

@@ -1,8 +1,8 @@
 import express from 'express';
-import { createBranch } from '../controllers/branchController.js';
+import { createBranch, getBranch, updateBranch } from '../controllers/branchController.js';
 
 const branchRoutes = express.Router();
 
-branchRoutes.post('/', createBranch);
+branchRoutes.post('/', createBranch).put('/:branchId', updateBranch).get('/:branchId', getBranch);
 
 export default branchRoutes;

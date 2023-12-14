@@ -7,7 +7,9 @@ class SuccessResponse {
 
   constructor(data, message) {
     this.data = data;
-    this.message = message;
+    if (message) {
+      this.message = message;
+    }
   }
 }
 export default SuccessResponse;
