@@ -10,7 +10,6 @@ const errorHandler = (err, _req, res, _next) => {
     desc: null,
     message: err.message || 'Server Error',
   };
-  console.log(err);
   // Mongoose
   if (err instanceof mongoose.Error.CastError) {
     errorResponse = new ErrorResponse(
