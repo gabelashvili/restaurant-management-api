@@ -51,25 +51,29 @@ export const getBranch = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Get all branches
-// @route   GET /api/v1/branch/:branchId
+// @route   GET /api/v1/branches
 // @access  Private, role-based
 export const getBranches = asyncHandler(async (req, res, _next) => {
-  const { page, limit } = req.query;
-  await filtersSchema.validate(req.query);
   const filters = {
-    pagination: {
-      limit,
-      page,
+    ...req.query.limit && req.query.page && {
+      pagination: {
+        limit: Number(req.query.limit),
+        page: Number(req.query.page),
+      },
+    },
+    select: 'general',
+    ...req.query.search && {
+      search: {
+        text: req.query.search,
+        fields: ['general.name.ka', 'general.name.en'],
+      },
     },
   };
 
-  const branches = await withFilters(BranchModel, filters);
+  await filtersSchema.validate(filters);
 
-  const count = await BranchModel.countDocuments();
+  const data = await withFilters(BranchModel, filters);
+  data.list = data.list.reduce((acc, cur) => [...acc, cur.general], []);
 
-  return res.send(new SuccessResponse({
-    branches,
-    totalPages: Math.ceil(count / limit),
-    currentPage: page,
-  }));
+  return res.send(new SuccessResponse(data));
 });
