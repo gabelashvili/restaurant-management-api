@@ -109,7 +109,8 @@ const generalInfoSchema = yup
       .strict(),
     email: yup.string().nullable(),
     phone: yup.string().nullable(),
-  }).noUnknown(true).strict();
+  }).required().noUnknown(true)
+  .strict();
 
 const workingHoursSchema = yup.object().shape({
   monday: weekDaySchema,
