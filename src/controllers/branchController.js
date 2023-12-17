@@ -4,6 +4,8 @@ import BranchModel from '../models/branchModel.js';
 import { branchSchema } from '../schemas/branch-schema.js';
 import { errors, success } from '../utils/responseMessages.js';
 import ErrorResponse from '../utils/errorResponse.js';
+import withFilters from '../utils/withFilters.js';
+import filtersSchema from '../schemas/filters-schema.js';
 
 // @desc    Create new branch
 // @route   POST /api/v1/branch
@@ -46,4 +48,28 @@ export const getBranch = asyncHandler(async (req, res, next) => {
   }
 
   return res.send(new SuccessResponse(branch));
+});
+
+// @desc    Get all branches
+// @route   GET /api/v1/branch/:branchId
+// @access  Private, role-based
+export const getBranches = asyncHandler(async (req, res, _next) => {
+  const { page, limit } = req.query;
+  await filtersSchema.validate(req.query);
+  const filters = {
+    pagination: {
+      limit,
+      page,
+    },
+  };
+
+  const branches = await withFilters(BranchModel, filters);
+
+  const count = await BranchModel.countDocuments();
+
+  return res.send(new SuccessResponse({
+    branches,
+    totalPages: Math.ceil(count / limit),
+    currentPage: page,
+  }));
 });
