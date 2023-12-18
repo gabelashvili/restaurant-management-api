@@ -9,6 +9,7 @@ export const success = {
   branch: {
     created: 'branch_created',
     updated: 'branch_updated',
+    removed: 'branch_removed',
   },
 };
 

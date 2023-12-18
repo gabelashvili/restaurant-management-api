@@ -3,10 +3,14 @@ class ErrorResponse extends Error {
 
   desc;
 
-  constructor(statusCode, desc, message) {
+  constructor(statusCode, message, desc) {
     super(message);
     this.statusCode = statusCode;
-    this.desc = desc;
+    if (desc) {
+      this.desc = desc;
+    } else {
+      this.desc = message;
+    }
   }
 }
 export default ErrorResponse;

@@ -7,30 +7,30 @@ import { errors } from '../utils/responseMessages.js';
 const errorHandler = (err, _req, res, _next) => {
   let errorResponse = {
     statusCode: err?.statusCode || 500,
-    desc: null,
+    desc: err.desc || null,
     message: err.message || 'Server Error',
   };
   // Mongoose
   if (err instanceof mongoose.Error.CastError) {
     errorResponse = new ErrorResponse(
       400,
-      err.message,
       errors.common.invalidParams,
+      err.message,
     );
   }
   if (err instanceof mongoose.Error.ValidationError) {
     errorResponse = new ErrorResponse(
       400,
-      Object.keys(err.errors).map((key) => err.errors[key].message).join(';'),
       errors.common.invalidParams,
+      Object.keys(err.errors).map((key) => err.errors[key].message).join(';'),
     );
   }
 
   if (err.code === 11000) {
     errorResponse = new ErrorResponse(
       400,
-      `${err.codeName} - ${JSON.stringify(err.keyValue)}`,
       errors.common.invalidParams,
+      `${err.codeName} - ${JSON.stringify(err.keyValue)}`,
     );
   }
 
@@ -38,8 +38,8 @@ const errorHandler = (err, _req, res, _next) => {
   if (err instanceof YupError) {
     errorResponse = new ErrorResponse(
       400,
-      err.errors.map((el) => el).join(';'),
       errors.common.invalidParams,
+      err.errors.map((el) => el).join(';'),
     );
   }
 
