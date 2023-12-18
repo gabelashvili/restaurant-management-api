@@ -77,3 +77,15 @@ export const getBranches = asyncHandler(async (req, res, _next) => {
 
   return res.send(new SuccessResponse(data));
 });
+
+// @desc    Remove branch details
+// @route   DELETE /api/v1/branch/:branchId
+// @access  Private, role-based
+export const removeBranch = asyncHandler(async (req, res, next) => {
+  const branch = await BranchModel.findByIdAndDelete(req.params.branchId);
+  if (!branch) {
+    return next(new ErrorResponse(404, errors.branch.notFound));
+  }
+
+  return res.send(new SuccessResponse(branch));
+});
