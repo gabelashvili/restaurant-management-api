@@ -73,7 +73,7 @@ export const getBranches = asyncHandler(async (req, res, _next) => {
   await filtersSchema.validate(filters);
 
   const data = await withFilters(BranchModel, filters);
-  data.list = data.list.reduce((acc, cur) => [...acc, cur.general], []);
+  data.list = data.list.reduce((acc, cur) => [...acc, { ...cur.general, _id: cur._id }], []);
 
   return res.send(new SuccessResponse(data));
 });
