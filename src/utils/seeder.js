@@ -27,8 +27,14 @@ const createRoles = async () => {
 
 const createAdminUser = async () => {
   const adminUser = {
-    firstName: 'Admin',
-    lastName: 'User',
+    firstName: {
+      ka: 'ლაშა',
+      en: 'Lasha',
+    },
+    lastName: {
+      ka: 'გაბელაშვილი',
+      en: 'Gabelashvili',
+    },
     email: 'gabelashvili1999@gmail.com',
     password: 'Mrzippo123!',
     roleId: 1,

@@ -6,16 +6,30 @@ import RoleModel from './roleModel.js';
 const UserSchema = new mongoose.Schema(
   {
     firstName: {
-      type: String,
-      required: true,
-      trim: true,
-      minlength: 2,
+      ka: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 2,
+      },
+      en: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 2,
+      },
     },
     lastName: {
-      type: String,
-      required: true,
-      trim: true,
-      minlength: 2,
+      ka: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      en: {
+        type: String,
+        required: true,
+        trim: true,
+      },
     },
     email: {
       type: String,
@@ -44,6 +58,10 @@ const UserSchema = new mongoose.Schema(
     avatar: {
       type: String,
       default: null,
+    },
+    phone: {
+      type: String,
+      required: true,
     },
     createdAt: { type: Date, select: false },
     updatedAt: { type: Date, select: false },
