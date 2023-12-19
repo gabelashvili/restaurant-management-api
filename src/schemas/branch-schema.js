@@ -51,7 +51,7 @@ const weekDaySchema = yup.object().shape({
     .array()
     .when('enabled', {
       is: true,
-      then: () => requiredDateSchema,
+      then: () => requiredDateSchema.min(1),
     })
     .when('enabled', {
       is: false,
