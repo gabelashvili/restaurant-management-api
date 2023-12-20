@@ -7,31 +7,31 @@ import EmployeeModel from '../models/employeeModel.js';
 import { errors, success } from '../utils/responseMessages.js';
 import SuccessResponse from '../utils/successResponse.js';
 import { updatePasswordSchema } from '../schemas/auth-schema.js';
-import { updateDetailsSchema } from '../schemas/employee-schema.js';
+import { upsertEmployeeSchema } from '../schemas/employee-schema.js';
 
 // @desc    Sign in user
 // @route   POST /api/v1/auth/sign-in
 // @access  Public
 export const signIn = asyncHandler(async (req, res, next) => {
   if (!req.body?.password || !req.body?.email) {
-    return next(new ErrorResponse(401, errors.user.unauthorized, errors.user.unauthorized));
+    return next(new ErrorResponse(401, errors.employee.unauthorized, errors.employee.unauthorized));
   }
 
   const user = await EmployeeModel.findOne({ email: req.body.email }).select('+password');
   if (!user) {
-    return next(new ErrorResponse(404, errors.user.notFound, errors.user.notFound));
+    return next(new ErrorResponse(404, errors.employee.notFound, errors.employee.notFound));
   }
 
   const isPasswordValid = await user.validatePassword(req.body.password);
   if (!isPasswordValid) {
-    return next(new ErrorResponse(400, errors.user.invalidCredentials, errors.user.invalidCredentials));
+    return next(new ErrorResponse(400, errors.employee.invalidCredentials, errors.employee.invalidCredentials));
   }
 
   const tokens = user.generateTokens();
 
   return res.send(new SuccessResponse(
     { userId: user.id, tokens },
-    success.user.signIn,
+    success.employee.signIn,
   ));
 });
 
@@ -52,14 +52,14 @@ export const getAuthedUser = asyncHandler(async (req, res, _next) => {
 export const refreshToken = async (req, res, next) => {
   const token = req?.headers?.authorization?.split('Bearer')?.[1]?.trim();
   if (!token) {
-    return next(new ErrorResponse(401, errors.user.unauthorized, errors.user.unauthorized));
+    return next(new ErrorResponse(401, errors.employee.unauthorized, errors.employee.unauthorized));
   }
   try {
     const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_KEY);
     const { userId } = decoded;
     const user = await EmployeeModel.findById(userId);
     if (!user) {
-      return next(new ErrorResponse(401, errors.user.unauthorized, errors.user.unauthorized));
+      return next(new ErrorResponse(401, errors.employee.unauthorized, errors.employee.unauthorized));
     }
     const { accessToken } = user.generateTokens();
     return res.send(new SuccessResponse(
@@ -67,7 +67,7 @@ export const refreshToken = async (req, res, next) => {
       null,
     ));
   } catch (err) {
-    return next(new ErrorResponse(401, errors.user.unauthorized, errors.user.unauthorized));
+    return next(new ErrorResponse(401, errors.employee.unauthorized, errors.employee.unauthorized));
   }
 };
 
@@ -81,7 +81,7 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
 
   const user = await EmployeeModel.findById(authedUser._id).select('+password');
   if (!user) {
-    return next(new ErrorResponse(401, errors.user.notFound, errors.user.notFound));
+    return next(new ErrorResponse(401, errors.employee.notFound, errors.employee.notFound));
   }
 
   const isPasswordValid = await user.validatePassword(req.body.currentPassword);
@@ -93,7 +93,7 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
 
   return res.send(new SuccessResponse(
     null,
-    success.user.passwordUpdate,
+    success.employee.passwordUpdate,
   ));
 });
 
@@ -101,11 +101,11 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1/auth/update-details
 // @access  Private
 export const updateDetails = asyncHandler(async (req, res, next) => {
-  await updateDetailsSchema.validate(req.body, { abortEarly: false });
+  await upsertEmployeeSchema.validate(req.body, { abortEarly: false });
 
   const user = await EmployeeModel.findByIdAndUpdate(req.authedUser._id, { ...req.body }, { new: true, runValidators: true });
   if (!user) {
-    return next(new ErrorResponse(401, errors.userNotFound, errors.userNotFound));
+    return next(new ErrorResponse(401, errors.employeeNotFound, errors.employeeNotFound));
   }
 
   return res.send(new SuccessResponse(

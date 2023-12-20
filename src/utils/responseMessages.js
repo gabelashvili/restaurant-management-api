@@ -2,9 +2,10 @@ export const success = {
   common: {
     dataUpdated: 'data_updated',
   },
-  user: {
+  employee: {
     signIn: 'sign_in',
     passwordUpdate: 'password_update',
+    created: 'employee_created',
   },
   branch: {
     created: 'branch_created',
@@ -20,7 +21,7 @@ export const errors = {
     somethingWentWrong: 'something_went_wrong',
     tooManyArguments: 'too_many_arguments',
   },
-  user: {
+  employee: {
     notFound: 'user_not_found',
     invalidCredentials: 'invalid_credentials',
     unauthorized: 'unauthorized',

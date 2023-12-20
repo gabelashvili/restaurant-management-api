@@ -6,7 +6,7 @@ import EmployeeModel from '../models/employeeModel.js';
 const checkToken = async (req, res, next) => {
   const token = req?.headers?.authorization?.split('Bearer')[1]?.trim();
   if (!token) {
-    return next(new ErrorResponse(401, errors.user.unauthorized, errors.user.unauthorized));
+    return next(new ErrorResponse(401, errors.employee.unauthorized, errors.employee.unauthorized));
   }
   try {
     jwt.verify(token, process.env.ACCESS_TOKEN_KEY);
@@ -14,13 +14,13 @@ const checkToken = async (req, res, next) => {
     if (decoded?.userId) {
       const user = await EmployeeModel.findById(decoded.userId);
       if (!user) {
-        return next(new ErrorResponse(401, errors.user.unauthorized, errors.user.unauthorized));
+        return next(new ErrorResponse(401, errors.employee.unauthorized, errors.employee.unauthorized));
       }
       req.authedUser = user;
     }
     return next();
   } catch (err) {
-    return next(new ErrorResponse(401, errors.user.unauthorized, errors.user.unauthorized));
+    return next(new ErrorResponse(401, errors.employee.unauthorized, errors.employee.unauthorized));
   }
 };
 

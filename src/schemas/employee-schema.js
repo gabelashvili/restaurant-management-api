@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { multiLangSchema } from './common-schemas.js';
 
-export const updateDetailsSchema = yup.object({
+export const upsertEmployeeSchema = yup.object({
   firstName: multiLangSchema.required(),
   lastName: multiLangSchema.required(),
   // eslint-disable-next-line max-len
