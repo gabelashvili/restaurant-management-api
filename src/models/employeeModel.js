@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import RoleModel from './roleModel.js';
 
-const UserSchema = new mongoose.Schema(
+const EmployeeSchema = new mongoose.Schema(
   {
     firstName: {
       ka: {
@@ -79,7 +79,7 @@ const UserSchema = new mongoose.Schema(
   },
 );
 
-UserSchema.virtual('role', {
+EmployeeSchema.virtual('role', {
   ref: RoleModel,
   localField: 'roleId',
   foreignField: 'roleId',
@@ -89,7 +89,7 @@ UserSchema.virtual('role', {
   },
 });
 
-UserSchema.pre('save', async function (next) {
+EmployeeSchema.pre('save', async function (next) {
   if (this.password) {
     const salt = await bcrypt.genSalt(Number(process.env.BCRYPT_SALT_ROUNDS));
     const hashedPassword = await bcrypt.hash(this.password, salt);
@@ -98,7 +98,7 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
-UserSchema.pre('findOneAndUpdate', async function (next) {
+EmployeeSchema.pre('findOneAndUpdate', async function (next) {
   if (this._update.password) {
     const salt = await bcrypt.genSalt(Number(process.env.BCRYPT_SALT_ROUNDS));
     const hashedPassword = await bcrypt.hash(this._update.password, salt);
@@ -107,12 +107,12 @@ UserSchema.pre('findOneAndUpdate', async function (next) {
   next();
 });
 
-UserSchema.methods.validatePassword = async function (password) {
+EmployeeSchema.methods.validatePassword = async function (password) {
   const isValid = await bcrypt.compare(password, this.password);
   return isValid;
 };
 
-UserSchema.methods.generateTokens = function generateTokens() {
+EmployeeSchema.methods.generateTokens = function generateTokens() {
   const accessToken = jwt.sign(
     { userId: this._id },
     process.env.ACCESS_TOKEN_KEY,
@@ -130,6 +130,6 @@ UserSchema.methods.generateTokens = function generateTokens() {
   return { accessToken, refreshToken };
 };
 
-const UserModel = mongoose.model('User', UserSchema);
+const EmployeeModel = mongoose.model('User', EmployeeSchema);
 
-export default UserModel;
+export default EmployeeModel;

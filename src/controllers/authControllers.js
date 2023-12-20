@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import path from 'path';
 import ErrorResponse from '../utils/errorResponse.js';
-import UserModel from '../models/userModel.js';
+import EmployeeModel from '../models/employeeModel.js';
 import { errors, success } from '../utils/responseMessages.js';
 import SuccessResponse from '../utils/successResponse.js';
 import { updateDetailsSchema, updatePasswordSchema } from '../schemas/auth-schema.js';
@@ -16,7 +16,7 @@ export const signIn = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(401, errors.user.unauthorized, errors.user.unauthorized));
   }
 
-  const user = await UserModel.findOne({ email: req.body.email }).select('+password');
+  const user = await EmployeeModel.findOne({ email: req.body.email }).select('+password');
   if (!user) {
     return next(new ErrorResponse(404, errors.user.notFound, errors.user.notFound));
   }
@@ -56,7 +56,7 @@ export const refreshToken = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_KEY);
     const { userId } = decoded;
-    const user = await UserModel.findById(userId);
+    const user = await EmployeeModel.findById(userId);
     if (!user) {
       return next(new ErrorResponse(401, errors.user.unauthorized, errors.user.unauthorized));
     }
@@ -78,7 +78,7 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
 
   await updatePasswordSchema.validate(req.body, { abortEarly: false });
 
-  const user = await UserModel.findById(authedUser._id).select('+password');
+  const user = await EmployeeModel.findById(authedUser._id).select('+password');
   if (!user) {
     return next(new ErrorResponse(401, errors.user.notFound, errors.user.notFound));
   }
@@ -88,7 +88,7 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(400, errors.common.invalidParams, errors.common.invalidParams));
   }
 
-  await UserModel.findOneAndUpdate({ _id: req.userId }, { password: req.body.newPassword });
+  await EmployeeModel.findOneAndUpdate({ _id: req.userId }, { password: req.body.newPassword });
 
   return res.send(new SuccessResponse(
     null,
@@ -102,7 +102,7 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
 export const updateDetails = asyncHandler(async (req, res, next) => {
   await updateDetailsSchema.validate(req.body, { abortEarly: false });
 
-  const user = await UserModel.findByIdAndUpdate(req.authedUser._id, { ...req.body }, { new: true, runValidators: true });
+  const user = await EmployeeModel.findByIdAndUpdate(req.authedUser._id, { ...req.body }, { new: true, runValidators: true });
   if (!user) {
     return next(new ErrorResponse(401, errors.userNotFound, errors.userNotFound));
   }
@@ -122,7 +122,7 @@ export const updateAvatar = asyncHandler(async (req, res, _next) => {
     });
   }
 
-  await UserModel.findByIdAndUpdate(req.authedUser.id, { avatar: req.file.filename });
+  await EmployeeModel.findByIdAndUpdate(req.authedUser.id, { avatar: req.file.filename });
 
   // toFile() method stores the image on disk
   return res.send(new SuccessResponse(

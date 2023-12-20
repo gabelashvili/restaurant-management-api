@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import colors from 'colors';
 import RoleModel from '../models/roleModel.js';
-import UserModel from '../models/userModel.js';
+import EmployeeModel from '../models/employeeModel.js';
 
 dotenv.config({ path: 'src/config/config.env' });
 
@@ -38,13 +38,14 @@ const createAdminUser = async () => {
     email: 'gabelashvili1999@gmail.com',
     password: 'Mrzippo123!',
     roleId: 1,
+    phone: '579288707',
   };
-  await UserModel.create(adminUser);
+  await EmployeeModel.create(adminUser);
 };
 
 const removeAll = async () => {
   await RoleModel.deleteMany();
-  await UserModel.deleteMany();
+  await EmployeeModel.deleteMany();
 };
 mongoose
   .connect(process.env.MONGO_DB || '')

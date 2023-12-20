@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import ErrorResponse from '../utils/errorResponse.js';
 import { errors } from '../utils/responseMessages.js';
-import UserModel from '../models/userModel.js';
+import EmployeeModel from '../models/employeeModel.js';
 
 const checkToken = async (req, res, next) => {
   const token = req?.headers?.authorization?.split('Bearer')[1]?.trim();
@@ -12,7 +12,7 @@ const checkToken = async (req, res, next) => {
     jwt.verify(token, process.env.ACCESS_TOKEN_KEY);
     const decoded = jwt.decode(token);
     if (decoded?.userId) {
-      const user = await UserModel.findById(decoded.userId);
+      const user = await EmployeeModel.findById(decoded.userId);
       if (!user) {
         return next(new ErrorResponse(401, errors.user.unauthorized, errors.user.unauthorized));
       }
