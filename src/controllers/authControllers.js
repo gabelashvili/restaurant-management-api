@@ -6,7 +6,8 @@ import ErrorResponse from '../utils/errorResponse.js';
 import EmployeeModel from '../models/employeeModel.js';
 import { errors, success } from '../utils/responseMessages.js';
 import SuccessResponse from '../utils/successResponse.js';
-import { updateDetailsSchema, updatePasswordSchema } from '../schemas/auth-schema.js';
+import { updatePasswordSchema } from '../schemas/auth-schema.js';
+import { updateDetailsSchema } from '../schemas/employee-schema.js';
 
 // @desc    Sign in user
 // @route   POST /api/v1/auth/sign-in
