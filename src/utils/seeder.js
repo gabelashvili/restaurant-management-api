@@ -16,7 +16,7 @@ const roles = [
     roleId: 2,
   },
   {
-    roleName: 'Employer',
+    roleName: 'Waiter',
     roleId: 3,
   },
 ];
