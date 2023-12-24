@@ -10,7 +10,10 @@ import { upsertEmployeeSchema } from '../schemas/employee-schema.js';
 export const createEmployee = asyncHandler(async (req, res) => {
   await upsertEmployeeSchema.validate(req.body, { abortEarly: false });
 
-  await EmployeeModel.create({ ...req.body }, { new: true, runValidators: true });
+  const password = (Math.random() + 1).toString(36).substring(4);
+  req.body.password = password;
+
+  await EmployeeModel.create(req.body);
 
   return res.send(new SuccessResponse(
     null,

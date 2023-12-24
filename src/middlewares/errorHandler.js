@@ -10,6 +10,7 @@ const errorHandler = (err, _req, res, _next) => {
     desc: err.desc || null,
     message: err.message || 'Server Error',
   };
+
   // Mongoose
   if (err instanceof mongoose.Error.CastError) {
     errorResponse = new ErrorResponse(
@@ -30,7 +31,7 @@ const errorHandler = (err, _req, res, _next) => {
     errorResponse = new ErrorResponse(
       400,
       errors.common.invalidParams,
-      `${err.codeName} - ${JSON.stringify(err.keyValue)}`,
+      `duplicate - ${JSON.stringify(err.keyValue)}`,
     );
   }
 

@@ -43,13 +43,7 @@ const EmployeeSchema = new mongoose.Schema(
       type: String,
       required: true,
       select: false,
-      // Min 1 uppercase letter.
-      // Min 1 lowercase letter.
-      // Min 1 special character.
-      // Min 1 number.
-      // Min 8 characters.
-      // Max 30 characters.
-      match: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^A-Za-z0-9]).{8,30}$/,
+      minlength: 8,
     },
     roleId: {
       type: Number,
@@ -130,6 +124,6 @@ EmployeeSchema.methods.generateTokens = function generateTokens() {
   return { accessToken, refreshToken };
 };
 
-const EmployeeModel = mongoose.model('User', EmployeeSchema);
+const EmployeeModel = mongoose.model('Employee', EmployeeSchema);
 
 export default EmployeeModel;
