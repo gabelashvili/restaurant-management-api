@@ -89,7 +89,7 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(400, errors.common.invalidParams, errors.common.invalidParams));
   }
 
-  await EmployeeModel.findOneAndUpdate({ _id: req.userId }, { password: req.body.newPassword });
+  await EmployeeModel.findOneAndUpdate({ _id: authedUser._id }, { password: req.body.newPassword });
 
   return res.send(new SuccessResponse(
     null,
