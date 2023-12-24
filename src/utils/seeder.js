@@ -8,15 +8,15 @@ dotenv.config({ path: 'src/config/config.env' });
 
 const roles = [
   {
-    roleName: 'Admin',
+    roleName: 'admin',
     roleId: 1,
   },
   {
-    roleName: 'Manager',
+    roleName: 'manager',
     roleId: 2,
   },
   {
-    roleName: 'Waiter',
+    roleName: 'waiter',
     roleId: 3,
   },
 ];

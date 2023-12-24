@@ -28,6 +28,10 @@ const withFilters = async (Model, filters) => {
     query.sort(filters.sort);
   }
 
+  if (filters.populate) {
+    query.populate(filters.populate);
+  }
+
   const list = await query;
   resObj.list = list;
 

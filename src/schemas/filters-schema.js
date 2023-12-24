@@ -42,6 +42,7 @@ const filtersSchema = yup.object().shape({
     text: yup.string(),
     fields: yup.array().of(yup.string()),
   }),
+  populate: yup.string(),
 }).noUnknown().strict(true);
 
 export default filtersSchema;
