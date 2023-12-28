@@ -6,6 +6,7 @@ export const success = {
     signIn: 'sign_in',
     passwordUpdate: 'password_update',
     created: 'employee_created',
+    updated: 'employee_updated',
   },
   branch: {
     created: 'branch_created',

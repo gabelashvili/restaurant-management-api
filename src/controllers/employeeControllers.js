@@ -1,12 +1,13 @@
 import asyncHandler from 'express-async-handler';
 import EmployeeModel from '../models/employeeModel.js';
-import { success } from '../utils/responseMessages.js';
+import { errors, success } from '../utils/responseMessages.js';
 import SuccessResponse from '../utils/successResponse.js';
 import { upsertEmployeeSchema } from '../schemas/employee-schema.js';
 import transporter from '../utils/emailTransporter.js';
 import RoleModel from '../models/roleModel.js';
 import filtersSchema from '../schemas/filters-schema.js';
 import withFilters from '../utils/withFilters.js';
+import ErrorResponse from '../utils/errorResponse.js';
 
 // @desc    Add New Employee
 // @route   POST /api/v1/employees
@@ -29,6 +30,24 @@ export const createEmployee = asyncHandler(async (req, res) => {
   return res.send(new SuccessResponse(
     null,
     success.employee.created,
+  ));
+});
+
+// @desc    Edit Employee
+// @route   PUT /api/v1/employees
+// @access  Private
+export const updateEmployee = asyncHandler(async (req, res, next) => {
+  await upsertEmployeeSchema.validate(req.body, { abortEarly: false });
+
+  const employee = await EmployeeModel.findByIdAndUpdate(req.params.employeeId, req.body);
+
+  if (!employee) {
+    return next(new ErrorResponse(404, errors.employee.notFound));
+  }
+
+  return res.send(new SuccessResponse(
+    null,
+    success.employee.updated,
   ));
 });
 
