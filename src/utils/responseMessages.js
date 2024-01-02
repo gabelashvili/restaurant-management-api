@@ -7,6 +7,7 @@ export const success = {
     passwordUpdate: 'password_update',
     created: 'employee_created',
     updated: 'employee_updated',
+    removed: 'employee_removed',
   },
   branch: {
     created: 'branch_created',

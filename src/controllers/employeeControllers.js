@@ -88,3 +88,16 @@ export const getEmployees = asyncHandler(async (req, res, _next) => {
 
   return res.send(new SuccessResponse(data));
 });
+
+// @desc    Remove branch details
+// @route   DELETE /api/v1/employees/:employeeId
+// @access  Private, role-based
+export const removeEmployee = asyncHandler(async (req, res, next) => {
+  const branch = await EmployeeModel.findByIdAndDelete(req.params.employeeId);
+
+  if (!branch) {
+    return next(new ErrorResponse(404, errors.employee.notFound));
+  }
+
+  return res.send(new SuccessResponse(null, success.employee.removed));
+});
