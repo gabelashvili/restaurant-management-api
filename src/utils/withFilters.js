@@ -6,15 +6,16 @@ const withFilters = async (Model, filters) => {
     ],
   } : {};
 
-  const query = Model.find(searchQuery)
-    .sort({ createdAt: -1 });
+  const query = Model.find(searchQuery);
 
   if (filters.select) {
     query.select(filters.select);
   }
 
-  if (filters.sort) {
-    query.sort({ [Object.keys(filters.sort)[0]]: Object.values(filters.sort)[0] });
+  if (filters.order) {
+    query.sort({ [filters.order.orderBy]: filters.order.orderDir });
+  } else {
+    query.sort({ createdAt: -1 });
   }
 
   if (filters.pagination) {

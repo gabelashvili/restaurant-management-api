@@ -19,19 +19,19 @@ const filtersSchema = yup.object().shape({
       return true;
     }),
   }),
-  sort: yup.object().shape({
-    sortBy: yup.string().test('sort', 'when sortBy is provided, sortDir is required field', function () {
-      const { sortDir } = this.parent;
-      const sortBy = this.originalValue;
-      if (sortBy && !sortDir) {
+  order: yup.object().shape({
+    orderBy: yup.string().test('sort', 'when orderBy is provided, orderDir is required field', function () {
+      const { orderDir } = this.parent;
+      const orderBy = this.originalValue;
+      if (orderBy && !orderDir) {
         return false;
       }
       return true;
     }),
-    sortDir: yup.string().oneOf(['asc', 'desc']).test('sort', 'when sortDir is provided, sortBy is required field', function () {
-      const { sortBy } = this.parent;
-      const sortDir = this.originalValue;
-      if (sortDir && !sortBy) {
+    orderDir: yup.string().oneOf(['asc', 'desc']).test('sort', 'when orderDir is provided, orderBy is required field', function () {
+      const { orderBy } = this.parent;
+      const orderDir = this.originalValue;
+      if (orderDir && !orderBy) {
         return false;
       }
       return true;

@@ -80,6 +80,12 @@ export const getEmployees = asyncHandler(async (req, res, _next) => {
       },
     },
     populate: 'role',
+    ...(req.query.orderBy && req.query.orderDir) && {
+      order: {
+        orderBy: req.query.orderBy,
+        orderDir: req.query.orderDir,
+      },
+    },
   };
 
   await filtersSchema.validate(filters);
