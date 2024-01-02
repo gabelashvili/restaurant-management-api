@@ -59,7 +59,6 @@ export const getRoles = asyncHandler(async (req, res) => {
 
   return res.send(new SuccessResponse(
     roles,
-    success.employee.created,
   ));
 });
 
@@ -77,7 +76,7 @@ export const getEmployees = asyncHandler(async (req, res, _next) => {
     ...req.query.search && {
       search: {
         text: req.query.search,
-        fields: ['general.name.ka', 'general.name.en'],
+        fields: ['firstName.ka', 'firstName.en', 'email', 'phone'],
       },
     },
     populate: 'role',
