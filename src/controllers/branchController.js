@@ -68,6 +68,12 @@ export const getBranches = asyncHandler(async (req, res, _next) => {
         fields: ['general.name.ka', 'general.name.en'],
       },
     },
+    ...(req.query.sortBy && req.query.sortBy) && {
+      sort: {
+        sortBy: req.query.sortBy,
+        sortDir: req.query.sortDir,
+      },
+    },
   };
 
   await filtersSchema.validate(filters);

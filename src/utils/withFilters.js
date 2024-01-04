@@ -12,8 +12,8 @@ const withFilters = async (Model, filters) => {
     query.select(filters.select);
   }
 
-  if (filters.order) {
-    query.sort({ [filters.order.orderBy]: filters.order.orderDir });
+  if (filters.sort) {
+    query.sort({ [filters.sort.sortBy]: filters.sort.sortDir });
   } else {
     query.sort({ createdAt: -1 });
   }
@@ -23,10 +23,6 @@ const withFilters = async (Model, filters) => {
     resObj.count = count;
     query.limit(filters.pagination.limit * 1);
     query.skip((filters.pagination.page - 1) * filters.pagination.limit);
-  }
-
-  if (filters.sort) {
-    query.sort(filters.sort);
   }
 
   if (filters.populate) {

@@ -80,10 +80,10 @@ export const getEmployees = asyncHandler(async (req, res, _next) => {
       },
     },
     populate: 'role',
-    ...(req.query.orderBy && req.query.orderDir) && {
-      order: {
-        orderBy: req.query.orderBy,
-        orderDir: req.query.orderDir,
+    ...(req.query.sortBy && req.query.sortBy) && {
+      sort: {
+        sortBy: req.query.sortBy,
+        sortDir: req.query.sortDir,
       },
     },
   };
