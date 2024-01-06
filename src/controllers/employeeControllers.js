@@ -86,6 +86,7 @@ export const getEmployees = asyncHandler(async (req, res, _next) => {
         sortDir: req.query.sortDir,
       },
     },
+    ...(req.query.roleId && { where: { roleId: req.query.roleId } }),
   };
 
   await filtersSchema.validate(filters);
