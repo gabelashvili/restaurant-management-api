@@ -6,7 +6,16 @@ const withFilters = async (Model, filters) => {
     ],
   } : {};
 
-  const query = Model.find(searchQuery);
+  const whereQuery = filters?.where ? {
+    $or: [
+      {
+        $and: Object.keys(filters?.where)
+          ?.reduce((acc, cur) => ([...acc, { [cur]: filters.where[cur] }]), []),
+      },
+    ],
+  } : {};
+
+  const query = Model.find({ ...searchQuery, ...whereQuery });
 
   if (filters.select) {
     query.select(filters.select);
