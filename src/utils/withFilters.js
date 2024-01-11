@@ -15,7 +15,7 @@ const withFilters = async (Model, filters) => {
     ],
   } : {};
 
-  const query = Model.find({ ...searchQuery, ...whereQuery });
+  const query = Model.find({ ...searchQuery, ...(filters?.where || {}) });
 
   if (filters.select) {
     query.select(filters.select);
@@ -24,11 +24,11 @@ const withFilters = async (Model, filters) => {
   if (filters.sort) {
     query.sort({ [filters.sort.sortBy]: filters.sort.sortDir });
   } else {
-    query.sort({ createdAt: -1 });
+    query.sort('-createdAt -_id');
   }
 
   if (filters.pagination) {
-    const count = await Model.countDocuments();
+    const count = await Model.find({ ...searchQuery, ...whereQuery }).countDocuments();
     resObj.count = count;
     query.limit(filters.pagination.limit * 1);
     query.skip((filters.pagination.page - 1) * filters.pagination.limit);
@@ -40,7 +40,6 @@ const withFilters = async (Model, filters) => {
 
   const list = await query;
   resObj.list = list;
-
   return resObj;
 };
 

@@ -57,7 +57,6 @@ const EmployeeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    createdAt: { type: Date, select: false },
     updatedAt: { type: Date, select: false },
   },
   {
