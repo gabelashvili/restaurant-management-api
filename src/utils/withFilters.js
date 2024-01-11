@@ -1,21 +1,19 @@
 const withFilters = async (Model, filters) => {
   const resObj = {};
-  const searchQuery = filters?.search ? {
+  let searchQuery = filters?.search ? {
     $and: [
       { $or: filters?.search?.fields?.reduce((acc, cur) => ([...acc, { [cur]: { $regex: filters.search.text.toLowerCase(), $options: 'i' } }]), []) },
     ],
   } : {};
 
-  const whereQuery = filters?.where ? {
-    $or: [
-      {
-        $and: Object.keys(filters?.where)
-          ?.reduce((acc, cur) => ([...acc, { [cur]: filters.where[cur] }]), []),
-      },
-    ],
-  } : {};
+  if (filters.where) {
+    searchQuery = {
+      ...searchQuery,
+      ...filters.where,
+    };
+  }
 
-  const query = Model.find({ ...searchQuery, ...(filters?.where || {}) });
+  const query = Model.find({ ...searchQuery });
 
   if (filters.select) {
     query.select(filters.select);
@@ -28,7 +26,7 @@ const withFilters = async (Model, filters) => {
   }
 
   if (filters.pagination) {
-    const count = await Model.find({ ...searchQuery, ...whereQuery }).countDocuments();
+    const count = await Model.find({ ...searchQuery }).countDocuments();
     resObj.count = count;
     query.limit(filters.pagination.limit * 1);
     query.skip((filters.pagination.page - 1) * filters.pagination.limit);
