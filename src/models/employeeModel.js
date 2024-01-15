@@ -61,7 +61,9 @@ const EmployeeSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    toObject: { virtuals: true },
+    toObject: {
+      virtuals: true,
+    },
     toJSON: {
       virtuals: true,
       versionKey: false,
@@ -79,6 +81,15 @@ EmployeeSchema.virtual('role', {
   justOne: true,
   options: {
     select: 'roleName roleLabel',
+  },
+});
+
+EmployeeSchema.virtual('branches', {
+  ref: 'Branch',
+  localField: '_id',
+  foreignField: 'general.managers',
+  options: {
+    select: 'general.name -general.managers',
   },
 });
 

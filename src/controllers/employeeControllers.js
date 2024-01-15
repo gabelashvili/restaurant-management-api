@@ -79,7 +79,7 @@ export const getEmployees = asyncHandler(async (req, res, _next) => {
         fields: ['firstName.ka', 'firstName.en', 'email', 'phone'],
       },
     },
-    populate: 'role',
+    populate: 'role branches',
     ...(req.query.sortBy && req.query.sortBy) && {
       sort: {
         sortBy: req.query.sortBy,
