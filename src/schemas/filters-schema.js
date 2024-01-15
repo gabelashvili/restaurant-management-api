@@ -42,7 +42,8 @@ const filtersSchema = yup.object().shape({
     text: yup.string(),
     fields: yup.array().of(yup.string()),
   }),
-  populate: yup.string(),
+  populate: yup.mixed(),
+  // populate: yup.string(),
   where: yup.lazy(() => yup.mixed()),
 }).noUnknown().strict(true);
 

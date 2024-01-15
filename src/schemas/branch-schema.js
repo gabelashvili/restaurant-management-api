@@ -109,6 +109,31 @@ const generalInfoSchema = yup
       .strict(),
     email: yup.string().nullable(),
     phone: yup.string().nullable(),
+    managers: yup
+      .array()
+      .of(
+        yup
+          .object()
+          .shape({
+            firstName: yup
+              .object()
+              .shape({
+                ka: yup.string().required(),
+                en: yup.string().required(),
+              })
+              .required(),
+            lastName: yup
+              .object()
+              .shape({
+                ka: yup.string().required(),
+                en: yup.string().required(),
+              })
+              .required(),
+            _id: yup.string().required(),
+          })
+          .required(),
+      )
+      .required(),
   }).required().noUnknown(true)
   .strict();
 

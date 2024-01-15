@@ -13,6 +13,10 @@ import filtersSchema from '../schemas/filters-schema.js';
 export const createBranch = asyncHandler(async (req, res, _next) => {
   await branchSchema.validate(req.body, { abortEarly: false });
 
+  if (req.body.general.managers) {
+    req.body.general.managers = req.body.general.managers.map((el) => el._id);
+  }
+
   const branch = await BranchModel.create(req.body);
 
   return res.send(new SuccessResponse(
@@ -42,7 +46,7 @@ export const updateBranch = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1/branch/:branchId
 // @access  Private, role-based
 export const getBranch = asyncHandler(async (req, res, next) => {
-  const branch = await BranchModel.findById(req.params.branchId);
+  const branch = await BranchModel.findById(req.params.branchId).populate({ path: 'general.managers', select: 'firstName lastName' });
   if (!branch) {
     return next(new ErrorResponse(404, errors.branch.notFound));
   }
@@ -74,6 +78,7 @@ export const getBranches = asyncHandler(async (req, res, _next) => {
         sortDir: req.query.sortDir,
       },
     },
+
   };
 
   await filtersSchema.validate(filters);
