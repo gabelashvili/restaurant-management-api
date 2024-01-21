@@ -91,7 +91,7 @@ EmployeeSchema.virtual('branches', {
   options: {
     select: 'general.name -general.managers',
   },
-});
+}).get((item) => item?.map((el) => ({ name: el.general.name, _id: el._id })));
 
 EmployeeSchema.pre('save', async function (next) {
   if (this.password) {
