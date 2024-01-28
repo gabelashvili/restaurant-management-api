@@ -12,6 +12,7 @@ import ErrorResponse from './utils/errorResponse.js';
 import { errors } from './utils/responseMessages.js';
 import branchRoutes from './routes/branchRoutes.js';
 import employeeRoutes from './routes/employeeRoutes.js';
+import productCategoryRoutes from './routes/productCategoryRoutes.js';
 
 // Load configs
 dotenv.config({ path: 'src/config/config.env' });
@@ -44,6 +45,7 @@ connectDb().then(() => {
   app.use('/api/v1/auth', authRoutes);
   app.use('/api/v1/branches', branchRoutes);
   app.use('/api/v1/employees', employeeRoutes);
+  app.use('/api/v1/product-categories', productCategoryRoutes);
 
   // Handle errors
 

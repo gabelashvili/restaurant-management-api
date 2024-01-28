@@ -14,6 +14,11 @@ export const success = {
     updated: 'branch_updated',
     removed: 'branch_removed',
   },
+  productCategory: {
+    created: 'product_category_created',
+    updated: 'product_category_updated',
+    removed: 'product_category_removed',
+  },
 };
 
 export const errors = {
@@ -35,5 +40,8 @@ export const errors = {
   },
   branch: {
     notFound: 'branch_not_found',
+  },
+  productCategory: {
+    notFound: 'product_category_not_found',
   },
 };
