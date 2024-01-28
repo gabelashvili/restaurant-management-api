@@ -32,6 +32,7 @@ export const errors = {
     notFound: 'user_not_found',
     invalidCredentials: 'invalid_credentials',
     unauthorized: 'unauthorized',
+    associatedBranch: 'associated_branch',
   },
   fileUpload: {
     invalidFileFormat: 'invalid_file_format',

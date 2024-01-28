@@ -100,11 +100,15 @@ export const getEmployees = asyncHandler(async (req, res, _next) => {
 // @route   DELETE /api/v1/employees/:employeeId
 // @access  Private, role-based
 export const removeEmployee = asyncHandler(async (req, res, next) => {
-  const branch = await EmployeeModel.findByIdAndDelete(req.params.employeeId);
-
+  const branch = await EmployeeModel.findById(req.params.employeeId).populate('branches');
   if (!branch) {
     return next(new ErrorResponse(404, errors.employee.notFound));
   }
+  if (branch.branches.length > 0) {
+    return next(new ErrorResponse(409, errors.employee.associatedBranch));
+  }
+
+  await branch.deleteOne();
 
   return res.send(new SuccessResponse(null, success.employee.removed));
 });
