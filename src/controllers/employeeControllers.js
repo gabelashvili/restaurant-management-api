@@ -37,7 +37,10 @@ export const createEmployee = asyncHandler(async (req, res) => {
 // @route   PUT /api/v1/employees
 // @access  Private
 export const updateEmployee = asyncHandler(async (req, res, next) => {
-  await upsertEmployeeSchema.validate(req.body, { abortEarly: false });
+  console.log(upsertEmployeeSchema, 123);
+  await upsertEmployeeSchema().validate(req.body, {
+    abortEarly: false,
+  });
 
   const employee = await EmployeeModel.findByIdAndUpdate(req.params.employeeId, req.body);
 

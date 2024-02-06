@@ -101,7 +101,12 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1/auth/update-details
 // @access  Private
 export const updateDetails = asyncHandler(async (req, res, next) => {
-  await upsertEmployeeSchema.validate(req.body, { abortEarly: false });
+  await upsertEmployeeSchema.validate(req.body, {
+    abortEarly: false,
+    context: {
+      isUpdate: true,
+    },
+  });
 
   const user = await EmployeeModel.findByIdAndUpdate(req.authedUser._id, { ...req.body }, { new: true, runValidators: true });
   if (!user) {
