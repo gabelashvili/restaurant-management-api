@@ -12,10 +12,6 @@ const ProductCategorySchema = new mongoose.Schema(
         required: true,
       },
     },
-    type: {
-      type: String,
-      enum: ['dish', 'drink'],
-    },
     createdAt: { type: Date, select: false },
     updatedAt: { type: Date, select: false },
   },
